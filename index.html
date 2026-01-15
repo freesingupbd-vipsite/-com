@@ -3,7 +3,22 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Go Free | Bangladesh Community </title>
+<title>Go Free</title>
+
+<!-- Facebook Pixel (SETUP READY) -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+
+fbq('init', 'PIXEL_ID_HERE');   // 🔴 এখানে পরে Pixel ID বসাবে
+fbq('track', 'PageView');
+</script>
 
 <!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
@@ -19,15 +34,11 @@ background:linear-gradient(180deg,#0b1d2a,#0f2a3d);
 color:#ffffff;
 scroll-behavior:smooth;
 }
-
-/* FIXED SECTION SPACING */
 .section{
 padding:35px 15px;
 display:flex;
 justify-content:center;
 }
-
-/* CARD */
 .card{
 max-width:420px;
 width:100%;
@@ -36,8 +47,6 @@ border-radius:22px;
 padding:22px;
 box-shadow:0 25px 60px rgba(0,0,0,.6);
 }
-
-/* TEXT */
 h1,h2{
 text-align:center;
 margin:8px 0;
@@ -49,8 +58,6 @@ font-size:15px;
 color:#e6e6e6;
 margin:8px 0;
 }
-
-/* BUTTON */
 .btn{
 width:100%;
 padding:14px;
@@ -64,16 +71,12 @@ color:#000;
 cursor:pointer;
 box-shadow:0 10px 25px rgba(255,215,0,.55);
 }
-
-/* FOOTER */
 .footer{
 text-align:center;
 font-size:13px;
 color:#ccc;
 margin-top:20px;
 }
-
-/* SUPPORT ICONS */
 .support{
 position:fixed;
 right:15px;
@@ -108,8 +111,6 @@ text-decoration:none;
 box-shadow:0 0 22px rgba(34,158,217,.7);
 z-index:99;
 }
-
-/* ADMIN */
 .adminBox{
 background:#0b1d2a;
 border-radius:16px;
@@ -134,7 +135,7 @@ border:none;
 
 <section class="section">
   <div class="card">
-    <h1>GO FREE | BANGLADESH </h1>
+    <h1>GO FREE</h1>
     <p style="text-align:center">
       ঘরে বসে অনলাইন আয়ের বাস্তব গাইডলাইন।  
       কোনো রিস্ক ছাড়াই শুরু করুন আজই।
@@ -200,6 +201,19 @@ border:none;
 <a class="support" href="javascript:void(0)">💬</a>
 <a class="tg" href="https://t.me/Adnanhubs" target="_blank">✈️</a>
 
+<!-- TAWK.TO LIVE CHAT -->
+<script type="text/javascript">
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+(function(){
+var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+s1.async=true;
+s1.src='https://embed.tawk.to/6968f25e0f26dd197d65962a/default';
+s1.charset='UTF-8';
+s1.setAttribute('crossorigin','*');
+s0.parentNode.insertBefore(s1,s0);
+})();
+</script>
+
 <script>
 // 🔥 FIREBASE CONFIG (UNCHANGED)
 firebase.initializeApp({
@@ -211,14 +225,20 @@ firebase.initializeApp({
 const db = firebase.database();
 const auth = firebase.auth();
 
-// DEFAULT LINKS (SAFE)
+// DEFAULT LINKS
 let REG_LINK = "https://www.tigerbd88.live/signup";
 let COM_LINK = "https://t.me/adnanchowdhory";
 
 // APPLY LINKS
 function applyLinks(){
-  regBtn.onclick = ()=>location.href=REG_LINK;
-  comBtn.onclick = ()=>location.href=COM_LINK;
+  regBtn.onclick = ()=>{
+    fbq('track','CompleteRegistration');
+    location.href = REG_LINK;
+  };
+  comBtn.onclick = ()=>{
+    fbq('track','Contact');
+    location.href = COM_LINK;
+  };
 }
 applyLinks();
 
@@ -230,7 +250,7 @@ db.ref("links").on("value",s=>{
  applyLinks();
 });
 
-// SAVE LINKS (ADMIN)
+// SAVE LINKS
 function saveLinks(){
  db.ref("links").set({
    reg: regLinkInp.value,
