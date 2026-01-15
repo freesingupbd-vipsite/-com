@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Go Free | Bangladesh Community </title>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+<style>
+*{box-sizing:border-box}
+body{
+margin:0;
+font-family:Arial,Helvetica,sans-serif;
+background:linear-gradient(180deg,#0b1d2a,#0f2a3d);
+color:#ffffff;
+scroll-behavior:smooth;
+}
+
+/* FIXED SECTION SPACING */
+.section{
+padding:35px 15px;
+display:flex;
+justify-content:center;
+}
+
+/* CARD */
+.card{
+max-width:420px;
+width:100%;
+background:linear-gradient(145deg,#132f45,#0b1d2a);
+border-radius:22px;
+padding:22px;
+box-shadow:0 25px 60px rgba(0,0,0,.6);
+}
+
+/* TEXT */
+h1,h2{
+text-align:center;
+margin:8px 0;
+color:#ffd700;
+}
+p{
+line-height:1.55;
+font-size:15px;
+color:#e6e6e6;
+margin:8px 0;
+}
+
+/* BUTTON */
+.btn{
+width:100%;
+padding:14px;
+margin:10px 0;
+border:none;
+border-radius:16px;
+font-size:16px;
+font-weight:bold;
+background:linear-gradient(135deg,#ffd700,#ffb300);
+color:#000;
+cursor:pointer;
+box-shadow:0 10px 25px rgba(255,215,0,.55);
+}
+
+/* FOOTER */
+.footer{
+text-align:center;
+font-size:13px;
+color:#ccc;
+margin-top:20px;
+}
+
+/* SUPPORT ICONS */
+.support{
+position:fixed;
+right:15px;
+bottom:85px;
+width:52px;
+height:52px;
+border-radius:50%;
+background:#ffd700;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:22px;
+color:#000;
+text-decoration:none;
+box-shadow:0 0 22px rgba(255,215,0,.7);
+z-index:99;
+}
+.tg{
+position:fixed;
+right:15px;
+bottom:18px;
+width:52px;
+height:52px;
+border-radius:50%;
+background:#229ED9;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:22px;
+color:#fff;
+text-decoration:none;
+box-shadow:0 0 22px rgba(34,158,217,.7);
+z-index:99;
+}
+
+/* ADMIN */
+.adminBox{
+background:#0b1d2a;
+border-radius:16px;
+padding:14px;
+margin-top:12px;
+}
+input{
+width:100%;
+padding:12px;
+margin:6px 0;
+border-radius:10px;
+border:none;
+}
+.small{font-size:13px;color:#cfcfcf}
+</style>
+</head>
+
+<body>
+
+<!-- USER PAGE -->
+<div id="userPage">
+
+<section class="section">
+  <div class="card">
+    <h1>GO FREE | BANGLADESH </h1>
+    <p style="text-align:center">
+      ঘরে বসে অনলাইন আয়ের বাস্তব গাইডলাইন।  
+      কোনো রিস্ক ছাড়াই শুরু করুন আজই।
+    </p>
+
+    <button class="btn" id="regBtn">Free Registration</button>
+    <button class="btn" id="comBtn">Join Community</button>
+  </div>
+</section>
+
+<section class="section">
+  <div class="card">
+    <h2>কেন Go Free?</h2>
+    <p>
+      অনলাইন বিজনেস শেখার সহজ ও প্র্যাকটিক্যাল প্ল্যাটফর্ম।  
+      রেজিস্ট্রেশন করে কমিউনিটিতে যুক্ত হন।
+    </p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="card">
+    <h2>Terms & Conditions</h2>
+    <p class="small">
+      এই সাইটটি শুধুমাত্র তথ্য ও প্রশিক্ষণের জন্য।  
+      কোনো ধরনের নিশ্চিত আয়ের প্রতিশ্রুতি দেওয়া হয় না।
+    </p>
+
+    <h2>Contact</h2>
+    <p class="small">
+      যেকোনো প্রশ্নে লাইভ চ্যাট অথবা টেলিগ্রামে যোগাযোগ করুন।
+    </p>
+
+    <div class="footer">© JCYBER</div>
+  </div>
+</section>
+
+</div>
+
+<!-- ADMIN PANEL -->
+<div id="adminPanel" style="display:none" class="section">
+  <div class="card">
+    <h2>Admin Panel</h2>
+
+    <div class="adminBox">
+      <h3>Edit Links</h3>
+      <input id="regLinkInp" placeholder="Registration Link">
+      <input id="comLinkInp" placeholder="Community Link">
+      <button class="btn" onclick="saveLinks()">Save Links</button>
+      <p id="saveMsg"></p>
+    </div>
+
+    <div class="adminBox">
+      <h3>User List</h3>
+      <div id="userList" class="small"></div>
+    </div>
+
+    <button class="btn" onclick="logout()">Logout</button>
+  </div>
+</div>
+
+<!-- SUPPORT ICONS -->
+<a class="support" href="javascript:void(0)">💬</a>
+<a class="tg" href="https://t.me/Adnanhubs" target="_blank">✈️</a>
+
+<script>
+// 🔥 FIREBASE CONFIG (UNCHANGED)
+firebase.initializeApp({
+  apiKey: "AIzaSyDpeyBpdODVkyZ3-uS1sgpBNHGAetrd5dM",
+  databaseURL: "https://updatehubs-f3fe7-default-rtdb.firebaseio.com",
+  projectId: "updatehubs-f3fe7"
+});
+
+const db = firebase.database();
+const auth = firebase.auth();
+
+// DEFAULT LINKS (SAFE)
+let REG_LINK = "https://www.tigerbd88.live/signup";
+let COM_LINK = "https://t.me/adnanchowdhory";
+
+// APPLY LINKS
+function applyLinks(){
+  regBtn.onclick = ()=>location.href=REG_LINK;
+  comBtn.onclick = ()=>location.href=COM_LINK;
+}
+applyLinks();
+
+// LOAD LINKS FROM ADMIN
+db.ref("links").on("value",s=>{
+ if(!s.exists()) return;
+ REG_LINK = s.val().reg || REG_LINK;
+ COM_LINK = s.val().com || COM_LINK;
+ applyLinks();
+});
+
+// SAVE LINKS (ADMIN)
+function saveLinks(){
+ db.ref("links").set({
+   reg: regLinkInp.value,
+   com: comLinkInp.value
+ });
+ saveMsg.innerText="Saved ✅";
+}
+
+// ADMIN ROUTE
+if(location.hash==="#admin"){
+ userPage.style.display="none";
+ adminPanel.style.display="block";
+}
+
+// LOGOUT
+function logout(){
+ auth.signOut().then(()=>location.href=location.pathname);
+}
+
+// USER LOG
+const uid="u"+Date.now();
+db.ref("users/"+uid).set({
+ time:new Date().toLocaleString(),
+ device:/Mobi/.test(navigator.userAgent)?"Mobile":"Desktop"
+});
+
+// LOAD USERS
+db.ref("users").on("value",s=>{
+ userList.innerHTML="";
+ s.forEach(c=>{
+  const u=c.val();
+  userList.innerHTML+=`${u.time} - ${u.device}<br>`;
+ });
+});
+</script>
+
+</body>
+</html>
